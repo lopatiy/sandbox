@@ -6,9 +6,9 @@ class Banner extends React.Component {
             <div className="banner">
                 <div className="container">
                     <h1 className="logo-font">
-                        {this.props.appName.toLowerCase()}
+                        Instagram
                     </h1>
-                    <p>A place to share your knowledge.</p>
+                    <p>Spam your friends</p>
                 </div>
             </div>
         );

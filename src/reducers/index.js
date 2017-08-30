@@ -1,10 +1,8 @@
-import defaultState from './state';
+import articles from './articles';
+import {combineReducers} from 'redux';
+import {routerReducer} from 'react-router-redux';
 
-export default function (state = defaultState, action) {
-    switch (action.type) {
-        case 'HOME_PAGE_LOADED' :
-            return {...state, articles: action.payload.articles};
-        default:
-            return {...state};
-    }
-}
+export default combineReducers({
+    articles,
+    routing: routerReducer
+});

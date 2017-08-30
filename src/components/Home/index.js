@@ -3,21 +3,22 @@ import MainView from './MainView';
 import React from 'react';
 import agent from '../../agent';
 import {connect} from 'react-redux';
+import { withRouter } from 'react-router';
 
-const mapStateToProps = state => ({appName: state.appName});
+const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
-    onLoad: (payload) => dispatch({type: 'HOME_PAGE_LOADED', payload})
+    loadArticles: (payload) => dispatch({type: 'HOME_PAGE_LOADED', payload})
 });
 
 class Home extends React.Component {
-    componentWillMount() {
-        this.props.onLoad(agent.Articles.all());
+    componentDidMount() {
+        this.props.loadArticles(agent.Articles.all());
     }
 
     render() {
         return (
             <div className="home-page">
-                <Banner appName={this.props.appName}/>
+                <Banner/>
                 <div className="container page">
                     <div className="row">
                         <MainView/>
@@ -33,4 +34,4 @@ class Home extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
