@@ -13,7 +13,7 @@ const promiseMiddleware = store => next => action => {
         return;
     }
 
-    next(action);
+    return next(action);
 };
 
 function isPromise(item) {

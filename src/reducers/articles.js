@@ -3,6 +3,6 @@ export default function (state = [], action) {
         case 'HOME_PAGE_LOADED' :
             return action.payload.articles;
         default :
-            return [];
+            return state;
     }
 }
