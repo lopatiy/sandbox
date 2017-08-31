@@ -1,3 +1,4 @@
 export default {
-    articles: null
+    articles: null,
+    locations: {place: 'globalFeed'}
 };
