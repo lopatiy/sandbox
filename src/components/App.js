@@ -12,13 +12,13 @@ class App extends Component {
             <div>
                 <Header/>
                 <Switch>
-                    <Route path="" component={Home}/>
-                    <Route path="/login" component={Login}/>
+                    <Route path="/" exact key="home" component={Home}/>
+                    <Route path="/login" key="login" component={Login}/>
                 </Switch>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => ({location: state.location});
+const mapStateToProps = (state) => ({routing: state.routing});
 export default withRouter(connect(mapStateToProps, () => ({}))(App));
