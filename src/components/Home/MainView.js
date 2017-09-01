@@ -2,14 +2,10 @@ import ArticleList from '../ArticleList';
 import React from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 const mapStateToProps = state => ({
-    articles: state.articles,
-    place: state.locations.place
-});
-
-const mapDispatchToProps = dispatch => ({
-    changePlace: (payload) => dispatch({type: 'CHANGE_PLACE', payload})
+    articles: state.articles
 });
 
 
@@ -17,41 +13,43 @@ class MainView extends React.Component {
     getPlaces() {
         return [
             {
-                id: 'globalFeed',
+                id: '',
                 link: 'Global Feed',
                 component: () => <ArticleList articles={this.props.articles}/>
             }, {
-                id: 'videosList',
-                link: 'Videos List',
+                id: 'uploaded',
+                link: 'Uploaded Videos',
                 component: () => <div>videos</div>
             }, {
                 id: 'upload',
                 link: 'Upload Video',
                 component: () => <div>upload</div>
-            },
+            }
         ]
     }
 
-    changeContent(key = 'globalFeed') {
-        this.props.changePlace(key)
-    }
-
     renderTab(place) {
+        let activeClass = this.props.place === place.id ? 'active' : '';
+        if(!this.props.place && place.id === "") {
+            activeClass = 'active';
+        }
+
         return (
             <li className="nav-item" key={place.id}>
-                <span onClick={this.changeContent.bind(this, place.id)}
-                      className={`nav-link ${this.props.place === place.id ? 'active' : ''}`}
-                      style={{cursor: 'pointer'}}>
-                    {place.link}
-                </span>
+                <Link to={`/${place.id}`}>
+                    <span className={`nav-link ${activeClass}`}
+                          style={{cursor: 'pointer'}}>
+                        {place.link}
+                    </span>
+                </Link>
             </li>
         )
     }
 
-    renderContent(){
+    renderContent() {
         const place = _.find(this.getPlaces(), ({id}) => id === this.props.place);
-        if(!place) {
-            return <div>Place not found</div>;
+        if (!place) {
+            return _.first(this.getPlaces()).component();
         }
 
         return place.component();
@@ -71,4 +69,4 @@ class MainView extends React.Component {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(mapStateToProps, () => ({}))(MainView);
