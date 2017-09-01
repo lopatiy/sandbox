@@ -3,11 +3,11 @@ import React from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
+import Upload from '../Video/Upload';
 
 const mapStateToProps = state => ({
     articles: state.articles
 });
-
 
 class MainView extends React.Component {
     getPlaces() {
@@ -23,14 +23,14 @@ class MainView extends React.Component {
             }, {
                 id: 'upload',
                 link: 'Upload Video',
-                component: () => <div>upload</div>
+                component: () => <Upload/>
             }
         ]
     }
 
     renderTab(place) {
         let activeClass = this.props.place === place.id ? 'active' : '';
-        if(!this.props.place && place.id === "") {
+        if (!this.props.place && place.id === "") {
             activeClass = 'active';
         }
 

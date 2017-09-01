@@ -1,10 +1,18 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const app = express();
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(fileUpload());
-app.post('/video-upload', function (req, res) {
+app.use(cors());
+
+app.post('/api/video-upload', function (req, res) {
     if (!req.files) {
         return res.status(400).send('No files were uploaded.');
     }
