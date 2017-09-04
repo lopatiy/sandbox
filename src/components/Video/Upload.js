@@ -2,6 +2,7 @@ import React from 'react';
 import {reduxForm, Field} from 'redux-form';
 import Dropzone from 'react-dropzone';
 import Agent from '../../agent';
+import './upload.css';
 
 const FILE_FIELD_NAME = 'files';
 
@@ -24,13 +25,13 @@ class Upload extends React.Component {
 
         return (
             <div>
-                <Dropzone onDrop={( filesToUpload, e ) => field.input.onChange(filesToUpload)}
+                <Dropzone className="drop-zone" onDrop={( filesToUpload, e ) => field.input.onChange(filesToUpload)}
                           name={field.name}>
-                    <div>Try dropping some files here, or click to select files to upload.</div>
+                    <div>+ Add files</div>
                 </Dropzone>
                 {error}
                 {files && Array.isArray(files) &&
-                (<ul>{ files.map((file, i) => <li key={i}>{file.name}</li>) }</ul>)}
+                (<ul className="file">{ files.map((file, i) => <li key={i}>{file.name}</li>) }</ul>)}
             </div>
         );
     }
@@ -38,16 +39,16 @@ class Upload extends React.Component {
     render() {
         const {handleSubmit, reset} = this.props;
         return (
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+            <form className="upload" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <div>
                     <Field name={FILE_FIELD_NAME} component={this.renderDropzoneInput}/>
                 </div>
-                <div>
-                    <button type="submit">
+                <div className="buttons">
+                    <button className="btn btn-primary" type="submit">
                         Submit
                     </button>
-                    <button onClick={reset}>
-                        Clear Values
+                    <button className="btn btn-primary" onClick={reset}>
+                        Clear
                     </button>
                 </div>
             </form>
