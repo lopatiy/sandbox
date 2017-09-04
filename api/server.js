@@ -10,7 +10,7 @@ app.post('/api/video-upload', function (req, res) {
     }
 
     let file = req.files.files;
-    file.mv(path.resolve(__dirname, `../public/uploaded/${file.name}`), function (err) {
+    file.mv(path.resolve(__dirname, `../uploaded/${file.name}`), function (err) {
         if (err) {
             return res.status(500).send(err);
         }
