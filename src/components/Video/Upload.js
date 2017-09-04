@@ -8,9 +8,7 @@ const FILE_FIELD_NAME = 'files';
 class Upload extends React.Component {
     onSubmit(data) {
         var body = new FormData();
-        Object.keys(data).forEach((key) => {
-            body.append(key, data[key]);
-        });
+        data.files.map((file) => body.append('files', file, file.name));
 
         console.info('POST', body, data);
         console.info('This is expected to fail:');
@@ -42,9 +40,7 @@ class Upload extends React.Component {
         return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <div>
-                    <label htmlFor={FILE_FIELD_NAME}>Files</label>
-                    <Field name={FILE_FIELD_NAME} component={this.renderDropzoneInput}
-                    />
+                    <Field name={FILE_FIELD_NAME} component={this.renderDropzoneInput}/>
                 </div>
                 <div>
                     <button type="submit">
