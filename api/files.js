@@ -39,16 +39,18 @@ class Files  {
 
 class FilesFS {
     constructor() {
+        this.source = process.env.DROPBOX || './uploaded/';
     }
 
     list() {
-        return fs.readdir(path.resolve(__dirname, './uploaded/')).then(data=> {
+        return fs.readdir(this.source).then(data=> {
             return data.filter(file => _.startsWith(file, 'video-'));
         })
     }
 
     save(filename) {
-        return new Promise((resolve, reject) => resolve(filename));
+        return fs.rename(path.resolve(__dirname, './uploaded'), `${this.source}/${filename}`)
+            .then(()=>filename);
     }
 
     remove(file) {
