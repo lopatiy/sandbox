@@ -49,7 +49,7 @@ class FilesFS {
     }
 
     save(filename) {
-        return fs.rename(path.resolve(__dirname, './uploaded'), `${this.source}/${filename}`)
+        return fs.rename(path.resolve(__dirname, `./uploaded/${filename}`), `${this.source}/${filename}`)
             .then(()=>filename);
     }
 
