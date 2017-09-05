@@ -18,15 +18,6 @@ const api = {
         axios.get(`${API_ROOT}${url}`).then(responseData),
     post: (url, data) => {
         return axios.post(getUrl(url), data).then(responseData);
-    },
-    put: (url, data, progress) => {
-        var config = {
-            onUploadProgress: function (progressEvent) {
-                progress(Math.round((progressEvent.loaded * 100) / progressEvent.total))
-            }
-        };
-
-        return axios.put('/video-upload', data, config)
     }
 };
 
