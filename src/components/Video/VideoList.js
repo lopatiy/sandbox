@@ -2,6 +2,7 @@ import React from 'react';
 import agent from '../../agent';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
+import VideoItem from './VideoItem';
 
 const mapStateToProps = state => ({
     videos : state.videos
@@ -31,10 +32,9 @@ class ArticleList extends React.Component {
         }
 
         return (
-            <ul>
-                {this.props.videos.map(video =>
-                    <li key={video}>{video}</li>)}
-            </ul>
+            <div>
+                {this.props.videos.map(video => <VideoItem video={video}/>)}
+            </div>
         );
     }
 }
