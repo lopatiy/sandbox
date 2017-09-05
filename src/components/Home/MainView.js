@@ -4,10 +4,7 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import Upload from '../Video/Upload';
-
-const mapStateToProps = state => ({
-    articles: state.articles
-});
+import VideoList from '../Video/VideoList';
 
 class MainView extends React.Component {
     getPlaces() {
@@ -19,7 +16,7 @@ class MainView extends React.Component {
             }, {
                 id: 'uploaded',
                 link: 'Uploaded Videos',
-                component: () => <div>videos</div>
+                component: () => <VideoList/>
             }, {
                 id: 'upload',
                 link: 'Upload Video',
@@ -69,4 +66,4 @@ class MainView extends React.Component {
     };
 }
 
-export default connect(mapStateToProps, () => ({}))(MainView);
+export default connect(()=>({}), () => ({}))(MainView);

@@ -1,7 +1,9 @@
-const path = require('path');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
+const {Files, FilesFS} = require('./files');
+const files = new Files(new FilesFS());
+
 
 app.use(fileUpload());
 app.post('/api/video-upload', function (req, res) {
@@ -10,13 +12,22 @@ app.post('/api/video-upload', function (req, res) {
     }
 
     let file = req.files.files;
-    const savePath = path.resolve(__dirname, `./uploaded/${file.name}`);
-    file.mv(savePath, function (err) {
-        if (err) {
-            return res.status(500).send(err);
-        }
-        res.send(JSON.stringify({response: savePath}));
-    });
+
+    files.save(file)
+        .then((filename) => res.send(filename))
+        .catch(e => res.status(500).send(e));
+});
+
+app.get('/api/videos', (req, res) => {
+    files.list()
+        .then((files) => {
+            res.send(files)
+        })
+        .catch(e => res.status(500).send(e));
+});
+
+app.get('/video', (req,res) => {
+    res.send()
 });
 
 app.listen(3001, function () {

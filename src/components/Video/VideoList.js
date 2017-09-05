@@ -1,41 +1,40 @@
 import React from 'react';
-import ArticleListItem from './ArticleListItem';
-import agent from '../agent';
+import agent from '../../agent';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
 
 const mapStateToProps = state => ({
-    articles: state.articles
+    videos : state.videos
 });
 const mapDispatchToProps = dispatch => ({
-    loadArticles: (payload) => dispatch({type: 'HOME_PAGE_LOADED', payload})
+    loadVideos: (payload) => dispatch({type: 'VIDEOS_PAGE_LOADED', payload})
 });
 
 class ArticleList extends React.Component {
     componentDidMount() {
-        this.props.loadArticles(agent.Articles.all());
+        this.props.loadVideos(agent.Videos.all());
     }
 
     render() {
-        if (!this.props.articles) {
+        if (!this.props.videos) {
             return (
                 <div className="article-preview">Loading...</div>
             );
         }
 
-        if (this.props.articles.length === 0) {
+        if (this.props.videos.length === 0) {
             return (
                 <div className="article-preview">
-                    No articles are here... yet.
+                    No videos are loaded.
                 </div>
             );
         }
 
         return (
-            <div>
-                {this.props.articles.map(article =>
-                    <ArticleListItem article={article} key={article.slug}/>)}
-            </div>
+            <ul>
+                {this.props.videos.map(video =>
+                    <li key={video}>{video}</li>)}
+            </ul>
         );
     }
 }

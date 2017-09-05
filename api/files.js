@@ -1,56 +1,59 @@
-var fs = require('fs');
+const fs = require('fs.promised');
+const path = require('path');
+const _ = require('lodash');
 
-export default class Files  {
-    api;
-
+class Files  {
     constructor(API) {
-        this.api
+        this.api = API;
+        this.update();
     }
 
-    loadFiles() {
-        return this.api.loadFiles();
+    update() {
+        this.api.list().then((data)=> this.files = data);
     }
 
-    saveFile(file) {
-        return this.api.saveFile(file);
+    list() {
+        return new Promise((resolve, reject) => {
+            if(true){
+                resolve(this.files);
+            }
+        })
     }
 
-    cutFile(file) {
-        return this.api.cutFile(file);
+    save(file) {
+        const filename = `video-${+new Date()}-${file.name}`;
+        return file.mv(path.resolve(__dirname, `./uploaded/${filename}`))
+            .then((data) => {
+                return this.api.save(filename)
+                    .then(filename => {
+                        this.update();
+                        return filename;
+                    });
+            });
     }
 
-    getFiles() {
-        return this.api.getFiles();
+    remove(file) {
+        return this.api.remove(file);
     }
 }
 
 class FilesFS {
-    files;
-
     constructor() {
-        this.files = [];
-        this.readFiles();
     }
 
-    readFiles() {
-        fs.readdir('../uploaded').then((data) => {
-            console.log(data);
+    list() {
+        return fs.readdir(path.resolve(__dirname, './uploaded/')).then(data=> {
+            return data.filter(file => _.startsWith(file, 'video-'));
         })
     }
 
-    loadFiles() {
-
+    save(filename) {
+        return new Promise((resolve, reject) => resolve(filename));
     }
 
-    saveFile(file) {
-
-    }
-
-    cutFile(file) {
-
-    }
-
-    getFiles() {
+    remove(file) {
 
     }
 }
+
+module.exports = {FilesFS, Files};

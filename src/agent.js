@@ -14,8 +14,9 @@ const extRequests = {
 };
 
 const api = {
-    get: url =>
-        axios.get(`${API_ROOT}${url}`).then(responseData),
+    get: url => {
+        return axios.get(getUrl(url)).then(responseData)
+    },
     post: (url, data) => {
         return axios.post(getUrl(url), data).then(responseData);
     }
@@ -31,7 +32,8 @@ const Videos = {
         if(promise){
             return promise.then(responseData);
         }
-    }
+    },
+    all: page => api.get('/videos')
 };
 
 export default {
