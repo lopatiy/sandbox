@@ -34,7 +34,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
-    "server": "node ./api/server",
+    "server": "DROPBOX=/home/artem/Dropbox && node ./api/server",
     "prod": "npm build && node ./src/prod.js"
   },
   "proxy": "http://localhost:3001"
