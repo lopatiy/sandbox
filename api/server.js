@@ -4,7 +4,6 @@ const app = express();
 const {Files, FilesFS} = require('./files');
 const files = new Files(new FilesFS());
 
-
 app.use(fileUpload());
 app.post('/api/video-upload', function (req, res) {
     if (!req.files) {
@@ -26,9 +25,10 @@ app.get('/api/videos', (req, res) => {
         .catch(e => res.status(500).send(e));
 });
 
-app.get('/video', (req,res) => {
+app.get('/api/video', (req,res) => {
     res.send()
 });
+
 
 app.listen(3001, function () {
     console.log("Server started :: LISTENING PORT 3001");
