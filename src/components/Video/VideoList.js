@@ -4,14 +4,16 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
 import VideoItem from './VideoItem';
 
-const mapStateToProps = state => ({
-    videos : state.videos
-});
+const mapStateToProps = state => {
+    return {
+        videos : state.video.uploadedList
+    }
+};
 const mapDispatchToProps = dispatch => ({
     loadVideos: (payload) => dispatch({type: 'VIDEOS_PAGE_LOADED', payload})
 });
 
-class ArticleList extends React.Component {
+class VideoList extends React.Component {
     componentDidMount() {
         this.props.loadVideos(agent.Videos.all());
     }
@@ -19,13 +21,13 @@ class ArticleList extends React.Component {
     render() {
         if (!this.props.videos) {
             return (
-                <div className="article-preview">Loading...</div>
+                <div className="item-preview">Loading...</div>
             );
         }
 
         if (this.props.videos.length === 0) {
             return (
-                <div className="article-preview">
+                <div className="item-preview">
                     No videos are loaded.
                 </div>
             );
@@ -33,10 +35,10 @@ class ArticleList extends React.Component {
 
         return (
             <div>
-                {this.props.videos.map(video => <VideoItem video={video}/>)}
+                {this.props.videos.map(video => <VideoItem key={video} video={video}/>)}
             </div>
         );
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ArticleList));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(VideoList));

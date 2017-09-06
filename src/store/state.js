@@ -1,4 +1,6 @@
 export default {
-    articles: null,
-    videos: null
+    video: {
+        uploadedList: null,
+        progress: null
+    }
 };

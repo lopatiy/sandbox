@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const EXT_API_ROOT = 'https://conduit.productionready.io/api';
 const API_ROOT = ``;
 const getUrl = (url) => `${API_ROOT}/api${url}`;
 
@@ -8,27 +7,31 @@ const responseData = res => {
     return res.data;
 };
 
-const extRequests = {
-    get: url =>
-        axios.get(`${EXT_API_ROOT}${url}`).then(responseData)
-};
-
 const api = {
     get: url => {
         return axios.get(getUrl(url)).then(responseData)
     },
-    post: (url, data) => {
-        return axios.post(getUrl(url), data).then(responseData);
+    post: (url, data, onUploadProgress) => {
+        const config = {
+            url : getUrl(url),
+            method: 'post',
+            data,
+            onUploadProgress
+        };
+
+        return axios.request(config).then(responseData);
     }
 };
 
-const Articles = {
-    all: page => extRequests.get(`/articles?limit=10`)
+const onUploadProgress = (callback) => {
+    return (e) => {
+        callback(Math.ceil(e.loaded / e.total * 100));
+    }
 };
 
 const Videos = {
-    upload: (body, progres) => {
-        let promise = api.post(`/video-upload`, body);
+    upload: (body, progressCallback) => {
+        let promise = api.post(`/video-upload`, body, onUploadProgress(progressCallback));
         if(promise){
             return promise.then(responseData);
         }
@@ -37,6 +40,5 @@ const Videos = {
 };
 
 export default {
-    Articles,
     Videos
 };

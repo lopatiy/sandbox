@@ -5,14 +5,28 @@
     height: 75px;
 
     border: 2px dashed #5CB85C;
-    margin: 10px;
+    margin-bottom: 10px;
     padding: 20px;
     text-align: center;
   }
 
   .file {
     color: black;
-    list-style-type: circle;
+
+    .progress {
+      height: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      line-height: 2rem;
+      position: relative;
+
+      span{
+        position: absolute;
+        width: 100%;
+        left: 0;
+      }
+
+    }
   }
 
   .buttons {

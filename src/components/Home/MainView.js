@@ -1,4 +1,3 @@
-import ArticleList from '../ArticleList';
 import React from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
@@ -12,7 +11,7 @@ class MainView extends React.Component {
             {
                 id: '',
                 link: 'Global Feed',
-                component: () => <ArticleList articles={this.props.articles}/>
+                component: () => null
             }, {
                 id: 'uploaded',
                 link: 'Uploaded Videos',

@@ -11,8 +11,8 @@ class VideoListItem extends React.Component {
         const name = _.tail(_.tail(parts)).join('-');
 
         return (
-            <div key={timestamp} className="article-preview">
-                <div className="article-meta">
+            <div key={timestamp} className="item-preview">
+                <div className="item-meta">
                     <div className="pull-xs-right">
                         <button
                             className="btn btn-sm btn-outline-primary">
@@ -22,7 +22,7 @@ class VideoListItem extends React.Component {
                 </div>
                 <span className="preview-link">
                     <img alt={name} src={`/dropbox/${video}`}/>
-                    <h1>{name}</h1>
+                    <h3>{name}</h3>
                     <p>Video description</p>
                     <ul className="tag-list">
                         {
