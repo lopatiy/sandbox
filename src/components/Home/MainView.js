@@ -9,10 +9,6 @@ class MainView extends React.Component {
     getPlaces() {
         return [
             {
-                id: '',
-                link: 'Global Feed',
-                component: () => null
-            }, {
                 id: 'uploaded',
                 link: 'Uploaded Videos',
                 component: () => <VideoList/>
