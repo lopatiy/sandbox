@@ -39,7 +39,7 @@ class Files  {
 
 class FilesFS {
     constructor() {
-        this.source = process.env.DROPBOX || path.resolve(__dirname, './uploaded/');
+        this.source = `${process.env.HOME}/Dropbox` || path.resolve(__dirname, './uploaded/');
     }
 
     list() {
