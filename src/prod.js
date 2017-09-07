@@ -16,7 +16,7 @@ app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
-app.listen(80, ()=>{
-    console.log(new Date() + ":: PRODUCTION SERVER LISTENING PORT 80")
+app.listen(8080, ()=>{
+    console.log(new Date() + ":: PRODUCTION SERVER LISTENING PORT 8080")
 });
 
