@@ -9,13 +9,16 @@ class Files  {
     }
 
     update() {
-        this.api.list().then((data)=> this.files = data);
+        this.updateTime = +new Date();
+        return this.api.list().then((data)=> this.files = data);
     }
 
     list() {
         return new Promise((resolve, reject) => {
-            if(true){
+            if (+new Date() - this.updateTime < 30000) {
                 resolve(this.files);
+            } else {
+                this.update().then(()=> resolve(this.files));
             }
         })
     }
