@@ -20,15 +20,11 @@ class Files  {
         })
     }
 
-    save(file) {
-        const filename = `video-${+new Date()}-${file.name}`;
-        return file.mv(path.resolve(__dirname, `./uploaded/${filename}`))
-            .then((data) => {
-                return this.api.save(filename)
-                    .then(filename => {
-                        this.update();
-                        return filename;
-                    });
+    save(filename) {
+        return this.api.save(filename)
+            .then(filename => {
+                this.update();
+                return filename;
             });
     }
 
@@ -49,8 +45,8 @@ class FilesFS {
     }
 
     save(filename) {
+        console.log(filename);
         return fs.rename(path.resolve(__dirname, `./uploaded/${filename}`), `${this.source}/${filename}`)
-            .then(()=>filename);
     }
 
     remove(file) {
