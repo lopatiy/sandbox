@@ -1,6 +1,7 @@
 import React from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {connect} from 'react-redux';
+import { withRouter } from 'react-router'
 import Agent from '../../agent';
 
 import './download.css'
@@ -29,6 +30,7 @@ class Download extends React.Component {
         let body = new FormData();
         body.append('downloadUrl', downloadUrl);
         Agent.Videos.download(body)
+            .then((filename) => this.props.history.push('/uploaded'))
             .catch(err => console.error(err))
     }
 
@@ -62,4 +64,4 @@ const connectedDownload = connect (
     mapDispatchToProps
 )(Download);
 
-export default reduxForm({form: 'downloadForm'})(connectedDownload);
+export default withRouter(reduxForm({form: 'downloadForm'})(connectedDownload));

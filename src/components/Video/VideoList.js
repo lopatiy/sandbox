@@ -3,6 +3,7 @@ import agent from '../../agent';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
 import VideoItem from './VideoItem';
+import _ from 'lodash';
 
 const mapStateToProps = state => {
     return {
@@ -35,7 +36,7 @@ class VideoList extends React.Component {
 
         return (
             <div>
-                {this.props.videos.map(video => <VideoItem key={video} video={video}/>)}
+                {_.map(_.reverse(this.props.videos), video => <VideoItem key={video} video={video}/>)}
             </div>
         );
     }
