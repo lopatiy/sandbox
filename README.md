@@ -1,4 +1,4 @@
-# GIT hook
+# Git hook
 
 ```sh
 touch .git/hooks/post-merge && chmod a+x .git/hooks/post-merge
