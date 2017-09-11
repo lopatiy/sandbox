@@ -1,11 +1,11 @@
 'use strict';
 
-const fs = require('fs.promised');
 const path = require('path');
 const shell = require('shelljs');
+const queue = require('./queue');
+const files = require('./files');
+const {QueuedVideo, QueueItemState} = queue;
 const _ = require('lodash');
-const {Files, FilesFS} = require('./files');
-const files = new Files(new FilesFS());
 
 const videoFormat = {
     MP4: 'mp4',
@@ -19,26 +19,53 @@ class Downloader {
     }
 
     execConstructor(url, filename, format) {
-        let command = `youtube-dl -f ${format || videoFormat.MP4} -o '${this.path}/${filename}.%(ext)s' --write-thumbnail --restrict-filenames ${url}`;
-        console.log(command);
+        let command = `youtube-dl -f ${format || videoFormat.MP4} -o '${this.path}/${filename}.%(ext)s' --restrict-filenames ${url}`;
         return command
     }
 
-    downloadVideo(url) {
-        const filename = (+new Date());
+    downloadVideo(url, name) {
+        const filename = name || (+new Date());
         return new Promise((resolve, reject) => {
-            let result = shell.exec(this.execConstructor(url, filename, videoFormat.MP4));
-
-            if (result.code === 0) {
-                resolve(`${filename}.${videoFormat.MP4}`)
-            } else {
-                reject(result.stderr)
-            }
+            shell.exec(this.execConstructor(url, filename, videoFormat.MP4), (code, out, err) => {
+                if (code === 0) {
+                    resolve(`${filename}.${videoFormat.MP4}`);
+                } else {
+                    reject(err);
+                }
+            })
         })
     }
 
-    getVideo(url) {
-        return this.downloadVideo(url);
+    checkVideos(){
+        QueuedVideo.find({state: QueueItemState.NEW})
+            .then((data) => {
+                _.map(data, (video) => {
+                    video.state = QueueItemState.LOADING;
+                    video.save();
+
+                    this.downloadVideo(video.url, video.name)
+                        .then((filename) => {
+                            video.state = QueueItemState.DOWNLOADED;
+                            video.save();
+                            files.save(filename);
+                        })
+                        .catch((e) => console.error(e))
+                })
+            })
+    }
+
+    getLoading(){
+        return QueuedVideo.find({state: QueueItemState.LOADING})
+    }
+
+    addVideoToQueue(url){
+        const video = new QueuedVideo({
+            name: +new Date(),
+            url: url,
+            state: QueueItemState.NEW
+        });
+
+        return video.save().then(()=> this.checkVideos())
     }
 }
 

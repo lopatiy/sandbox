@@ -3,58 +3,81 @@ import {reduxForm, Field} from 'redux-form';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router'
 import Agent from '../../agent';
+import a from  '../../actions';
+import agent from  '../../agent';
+import _ from  'lodash';
+import moment from 'moment';
 
-import './download.css'
+import './Download.css'
 
 const mapStateToProps = state => {
-    return {}
+    return {
+        loading : state.video.loadingList
+    }
 };
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        loadLoading: (payload) => dispatch({type:a.video.UPLOAD_LOADED, payload})
+    }
 };
 
 class Download extends React.Component {
-    renderFileInput(field) {
-        const error = field.meta.touched && field.meta.error && <span className="error">{field.meta.error}</span>;
+    componentDidMount(){
+        this.update();
+    }
 
-        return (
-            <div className="input-group">
-                <span className="input-group-addon" id="basic-addon1">URL</span>
-                <input type="text" className="form-control" name={field.name} value={field.input.value}/>
-                {error}
-            </div>
-        )
+    update(){
+        this.props.loadLoading(agent.Videos.loading());
     }
 
     onSubmit({downloadUrl}) {
-        let body = new FormData();
-        body.append('downloadUrl', downloadUrl);
-        Agent.Videos.download(body)
-            .then((filename) => this.props.history.push('/uploaded'))
-            .catch(err => console.error(err))
+        if(downloadUrl){
+            let body = new FormData();
+            body.append('downloadUrl', downloadUrl);
+            Agent.Videos.download(body)
+                .then((filename) => this.update())
+                .catch(err => console.error(err))
+        }
     }
 
     render() {
+        const renderItem = (video) =>
+            (
+                <li className='list-group-item' key={video.name}>
+                    Since {moment(parseInt(video.name, 10)).format('HH:mm:SS DD/MM')}
+                    <a href={video.url}>
+                        <i className="fa fa-arrow-circle-o-right pull-right" style={{fontSize: '1.5em'}}/>
+                    </a>
+                </li>
+            );
+
         const {handleSubmit, reset} = this.props;
         return (
-            <form className="upload" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <div>
-                    <Field
-                        name="downloadUrl"
-                        component="input"
-                        type="text"
-                        placeholder="Youtube Video URL"
-                    />
-                </div>
-                <div className="buttons">
-                    <button className="btn btn-primary" type="submit">
-                        Submit
-                    </button>
-                    <button className="btn btn-primary" type="button" onClick={reset}>
-                        Clear
-                    </button>
-                </div>
-            </form>
+            <div>
+                <form className="upload" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                    <div>
+                        <Field
+                            name="downloadUrl"
+                            component="input"
+                            type="text"
+                            placeholder="Youtube Video URL"
+                        />
+                    </div>
+                    <div className="buttons">
+                        <button className="btn btn-primary" type="submit">
+                            Submit
+                        </button>
+                        <button className="btn btn-primary" type="button" onClick={reset}>
+                            Clear
+                        </button>
+                    </div>
+                </form>
+                <hr/>
+                <h5>Loading Queue: <i className="fa fa-refresh pull-right pointer" onClick={this.update.bind(this)}/></h5>
+                <ul className='list-group'>
+                    {_.map(this.props.loading, renderItem)}
+                </ul>
+            </div>
         );
     }
 }

@@ -4,17 +4,19 @@ import {connect} from 'react-redux';
 import Dropzone from 'react-dropzone';
 import Agent from '../../agent';
 import a from '../../actions';
-import './upload.css';
 import _ from 'lodash';
+import './Upload.css';
 
 const FILE_FIELD_NAME = 'files';
 const mapStateToProps = state => {
-    return {progress: state.video.progress}
+    return {
+        progress: state.video.progress,
+        loadingList: state.video.loadingList
+    }
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onProgressChange :
-            (value) => dispatch({type: a.video.PROGRESS_CHANGED,payload: value})
+        onProgressChange : (payload) => dispatch({type: a.video.PROGRESS_CHANGED, payload}),
     }
 };
 

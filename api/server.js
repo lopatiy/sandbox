@@ -1,12 +1,11 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
-const {Files, FilesFS} = require('./files');
+const files = require('./files');
 const {Downloader} = require('./downloader');
 const _ = require('lodash');
 
 const app = express();
-const files = new Files(new FilesFS());
 const downloader = new Downloader();
 
 app.use(fileUpload());
@@ -24,15 +23,19 @@ app.post('/api/video-upload', (req, res) => {
                 .catch(e => res.status(500).send(e)));
 });
 
+app.get('/api/loading-videos', (req, res) => {
+    downloader.checkVideos();
+    downloader.getLoading()
+        .then((data)=> {
+            res.send(_.map(data, (item) => _.pick(item, ['name', 'url'])))
+        })
+});
+
 app.post('/api/video-download', (req, res) => {
-    console.log(req);
-    console.log(req.body.downloadUrl);
     if (_.isString(req.body.downloadUrl) && !_.isEmpty(req.body.downloadUrl)) {
-        downloader.getVideo(req.body.downloadUrl)
-            .then((filename) =>
-                files.save(filename)
-                    .then((filename) => res.send(filename))
-                    .catch(e => res.status(500).send(e)))
+        downloader.addVideoToQueue(req.body.downloadUrl)
+            .then(() => res.send('Added to queue'))
+            .catch(e => res.status(500).send(e))
     } else {
         res.status(400).send('Missing Video URL');
     }
@@ -51,6 +54,4 @@ app.get('/api/video', (req, res) => {
 });
 
 
-app.listen(3001, function () {
-    console.log("Server started :: LISTENING PORT 3001");
-});
+app.listen(3001, () => console.log("Server started :: LISTENING PORT 3001"));

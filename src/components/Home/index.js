@@ -12,11 +12,6 @@ class Home extends React.Component {
                 <div className="container page">
                     <div className="row">
                         <MainView place={this.props.place}/>
-                        <div className="col-md-3">
-                            <div className="sidebar">
-                                <p>Popular Tags</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

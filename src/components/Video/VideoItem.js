@@ -1,5 +1,5 @@
 import React from 'react';
-import './item.css';
+import './VideoItem.css';
 import _ from 'lodash';
 
 class VideoListItem extends React.Component {
@@ -19,14 +19,6 @@ class VideoListItem extends React.Component {
         const {video} = this.props;
         return (
             <div key={video} className="item-preview">
-                <div className="item-meta">
-                    <div className="pull-xs-right">
-                        <button
-                            className="btn btn-sm btn-outline-primary">
-                            <i className="ion-heart"></i> 1
-                        </button>
-                    </div>
-                </div>
                 <span className="preview-link">
                     {this.renderPreview(video)}
                     <h3>{video}</h3>

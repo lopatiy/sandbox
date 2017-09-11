@@ -57,4 +57,4 @@ class FilesFS {
     }
 }
 
-module.exports = {FilesFS, Files};
+module.exports = new Files(new FilesFS());

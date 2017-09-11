@@ -42,6 +42,7 @@ const Videos = {
             return promise.then(responseData);
         }
     },
+    loading : () => api.get('/loading-videos'),
     all: page => api.get('/videos')
 };
 
