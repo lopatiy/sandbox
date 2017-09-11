@@ -36,6 +36,12 @@ const Videos = {
             return promise.then(responseData);
         }
     },
+    download: (body) => {
+        let promise = api.post(`/video-download`, body);
+        if (promise) {
+            return promise.then(responseData);
+        }
+    },
     all: page => api.get('/videos')
 };
 

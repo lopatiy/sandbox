@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import Upload from '../Video/Upload';
+import Download from '../Video/Download';
 import VideoList from '../Video/VideoList';
 
 class MainView extends React.Component {
@@ -16,13 +17,17 @@ class MainView extends React.Component {
                 id: 'upload',
                 link: 'Upload Video',
                 component: () => <Upload/>
+            }, {
+                id: 'download',
+                link: 'Download Video',
+                component: ()=> <Download/>
             }
         ]
     }
 
     renderTab(place) {
         let activeClass = this.props.place === place.id ? 'active' : '';
-        if (!this.props.place && place.id === "") {
+        if (!this.props.place && place.id === "uploaded") {
             activeClass = 'active';
         }
 

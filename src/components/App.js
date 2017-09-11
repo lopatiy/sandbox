@@ -30,6 +30,7 @@ class App extends Component {
                     <Route path="/" exact key="feed" component={Home} place=""/>
                     <PropsRoute path="/uploaded" exact key="uploaded" component={Home} place="uploaded"/>
                     <PropsRoute path="/upload" exact key="upload" component={Home} place="upload"/>
+                    <PropsRoute path="/download" exact key="upload" component={Home} place="download"/>
                     <Route path="/login" key="login" component={Login}/>
                 </Switch>
             </div>
