@@ -43,7 +43,7 @@ class FilesFS {
 
     list() {
         return fs.readdir(this.source).then(data=> {
-            return data.filter(file => _.startsWith(file, 'video-'));
+            return data.filter(file => !_.startsWith(file, '.'));
         })
     }
 

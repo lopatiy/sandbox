@@ -12,26 +12,24 @@ const mapDispatchToProps = dispatch => {
     return {}
 };
 
-class Upload extends React.Component {
-    onSubmit(data){
-        if(data.videoUrl){
-            const formData = new FormData();
-            formData.append('downloadUrl', data.videoUrl);
-            Agent.Videos.download(formData)
-                .catch(err => console.error(err));
-        }
-    }
-
+class Download extends React.Component {
     renderFileInput(field) {
         const error = field.meta.touched && field.meta.error && <span className="error">{field.meta.error}</span>;
 
         return (
             <div className="input-group">
                 <span className="input-group-addon" id="basic-addon1">URL</span>
-                <input type="text" className="form-control"  name={field.name} value={field.input.value}/>
+                <input type="text" className="form-control" name={field.name} value={field.input.value}/>
                 {error}
             </div>
         )
+    }
+
+    onSubmit({downloadUrl}) {
+        let body = new FormData();
+        body.append('downloadUrl', downloadUrl);
+        Agent.Videos.download(body)
+            .catch(err => console.error(err))
     }
 
     render() {
@@ -39,13 +37,18 @@ class Upload extends React.Component {
         return (
             <form className="upload" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <div>
-                    <Field name="videoUrl" component={this.renderFileInput.bind(this)}/>
+                    <Field
+                        name="downloadUrl"
+                        component="input"
+                        type="text"
+                        placeholder="Youtube Video URL"
+                    />
                 </div>
                 <div className="buttons">
                     <button className="btn btn-primary" type="submit">
                         Submit
                     </button>
-                    <button className="btn btn-primary" onClick={reset}>
+                    <button className="btn btn-primary" type="button" onClick={reset}>
                         Clear
                     </button>
                 </div>
@@ -54,9 +57,9 @@ class Upload extends React.Component {
     }
 }
 
-const ConnectedUpload = connect (
+const connectedDownload = connect (
     mapStateToProps,
     mapDispatchToProps
-)(Upload);
+)(Download);
 
-export default reduxForm({form: 'simple'})(ConnectedUpload);
+export default reduxForm({form: 'downloadForm'})(connectedDownload);

@@ -3,15 +3,22 @@ import './item.css';
 import _ from 'lodash';
 
 class VideoListItem extends React.Component {
+
+    renderPreview(name){
+        if(_.endsWith(name, '.mp4')){
+            return (
+                <video width="640" height="480" controls>
+                <source src={`/dropbox/${name}`} type="video/mp4"/>
+            </video>)
+        } else {
+            return (<img alt={name} src={`/dropbox/${name}`}/>)
+        }
+    }
+
     render() {
         const {video} = this.props;
-
-        const parts = video.split('-');
-        const timestamp = parts[1];
-        const name = _.tail(_.tail(parts)).join('-');
-
         return (
-            <div key={timestamp} className="item-preview">
+            <div key={video} className="item-preview">
                 <div className="item-meta">
                     <div className="pull-xs-right">
                         <button
@@ -21,8 +28,8 @@ class VideoListItem extends React.Component {
                     </div>
                 </div>
                 <span className="preview-link">
-                    <img alt={name} src={`/dropbox/${video}`}/>
-                    <h3>{name}</h3>
+                    {this.renderPreview(video)}
+                    <h3>{video}</h3>
                     <p>Video description</p>
                     <ul className="tag-list">
                         {
@@ -38,9 +45,7 @@ class VideoListItem extends React.Component {
                 </span>
             </div>
         );
-
     }
-
 }
 
 export default VideoListItem;

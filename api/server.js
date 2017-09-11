@@ -26,8 +26,9 @@ app.post('/api/video-upload', (req, res) => {
 
 app.post('/api/video-download', (req, res) => {
     console.log(req);
-    if (_.isString(req.query.downloadUrl) && !_.isEmpty(req.query.downloadUrl)) {
-        downloader.getVideo(req.query.downloadUrl)
+    console.log(req.body.downloadUrl);
+    if (_.isString(req.body.downloadUrl) && !_.isEmpty(req.body.downloadUrl)) {
+        downloader.getVideo(req.body.downloadUrl)
             .then((filename) =>
                 files.save(filename)
                     .then((filename) => res.send(filename))

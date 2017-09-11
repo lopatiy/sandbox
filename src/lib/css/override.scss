@@ -1,7 +1,12 @@
 .nav {
   li {
-    a:hover {
-      background: transparent;
+    a:hover,
+    a {
+      background: white !important;
     }
   }
+}
+
+.home-page .feed-toggle {
+  margin-bottom: 2px;
 }

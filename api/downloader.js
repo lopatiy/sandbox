@@ -20,6 +20,7 @@ class Downloader {
 
     execConstructor(url, filename, format) {
         let command = `youtube-dl -f ${format || videoFormat.MP4} -o '${this.path}/${filename}.%(ext)s' --write-thumbnail --restrict-filenames ${url}`;
+        console.log(command);
         return command
     }
 
