@@ -1,5 +1,7 @@
 #!/bin/bash
 
+forever stopall
+
 npm i
 npm run build
 rm -r ./build/dropbox
