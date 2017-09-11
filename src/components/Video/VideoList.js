@@ -17,8 +17,12 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class VideoList extends React.Component {
+    updateList () {
+        this.props.loadVideos(agent.Videos.all())
+    }
+
     componentDidMount() {
-        this.props.loadVideos(agent.Videos.all());
+        this.updateList();
     }
 
     render() {
@@ -38,7 +42,8 @@ class VideoList extends React.Component {
 
         return (
             <div>
-                {_.map(_.reverse(this.props.videos), video => <VideoItem key={video} video={video}/>)}
+                {_.map(_.reverse(this.props.videos), video =>
+                    <VideoItem key={video} video={video} updateList={this.updateList.bind(this)}/>)}
             </div>
         );
     }

@@ -32,7 +32,8 @@ class Files  {
     }
 
     remove(file) {
-        return this.api.remove(file);
+        return this.api.remove(file)
+            .then(()=> this.update());
     }
 }
 
@@ -48,12 +49,11 @@ class FilesFS {
     }
 
     save(filename) {
-        console.log(filename);
         return fs.rename(path.resolve(__dirname, `./uploaded/${filename}`), `${this.source}/${filename}`)
     }
 
-    remove(file) {
-
+    remove(filename) {
+        return fs.unlink(`${this.source}/${filename}`);
     }
 }
 

@@ -31,6 +31,16 @@ app.get('/api/loading-videos', (req, res) => {
         })
 });
 
+app.delete('/api/video/:filename', (req, res) => {
+    if (_.isString(req.params.filename) && !_.isEmpty(req.params.filename)) {
+        files.remove(req.params.filename)
+            .then(() => res.send('Removed'))
+            .catch(e => res.status(500).send(e))
+    } else {
+        res.status(400).send('Missing filename');
+    }
+});
+
 app.post('/api/video-download', (req, res) => {
     if (_.isString(req.body.downloadUrl) && !_.isEmpty(req.body.downloadUrl)) {
         downloader.addVideoToQueue(req.body.downloadUrl)
