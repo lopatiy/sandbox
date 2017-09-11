@@ -6,7 +6,7 @@ import Agent from '../../agent';
 import a from  '../../actions';
 import agent from  '../../agent';
 import _ from  'lodash';
-import moment from 'moment';
+import dateformat from 'dateformat';
 
 import './Download.css'
 
@@ -44,7 +44,7 @@ class Download extends React.Component {
         const renderItem = (video) =>
             (
                 <li className='list-group-item' key={video.name}>
-                    Since {moment(parseInt(video.name, 10)).format('HH:mm:SS DD/MM')}
+                    Since {dateformat(parseInt(video.name, 10), 'HH:MM:ss, d mmm')}
                     <a href={video.url}>
                         <i className="fa fa-arrow-circle-o-right pull-right" style={{fontSize: '1.5em'}}/>
                     </a>
