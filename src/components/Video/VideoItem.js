@@ -7,7 +7,7 @@ class VideoListItem extends React.Component {
     renderPreview(name){
         if(_.endsWith(name, '.mp4')){
             return (
-                <video width="640" height="480" controls>
+                <video controls preload="metadata">
                 <source src={`/dropbox/${name}`} type="video/mp4"/>
             </video>)
         } else {

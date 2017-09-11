@@ -5,6 +5,8 @@ import { withRouter } from 'react-router';
 import VideoItem from './VideoItem';
 import _ from 'lodash';
 
+import './list.css'
+
 const mapStateToProps = state => {
     return {
         videos : state.video.uploadedList
