@@ -4,7 +4,20 @@ div.item-preview {
       width: 200px;
       margin-bottom: 15px;
     }
+
+    video {
+      width: 100%;
+      margin: 0;
+    }
   }
 
-  padding: 2.5rem 0;
+
+  background: #5CB85C;
+  border: 5px solid white;
+  padding: 0;
+  color: white;
+
+  h5 {
+    padding: 0 1rem;
+  }
 }

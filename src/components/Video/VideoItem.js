@@ -4,19 +4,36 @@ import _ from 'lodash';
 import agent from '../../agent';
 
 class VideoListItem extends React.Component {
-    renderPreview(name){
-        if(_.endsWith(name, '.mp4')){
-            return (
-                <video controls preload="metadata">
-                <source src={`/dropbox/${name}`} type="video/mp4"/>
-            </video>)
-        } else {
-            return (<img alt={name} src={`/dropbox/${name}`}/>)
+    constructor(props, context){
+        super(props, context);
+        this.state = {
+            showControls: false
         }
     }
 
-    deleteVideo(filename){
-        if(window.confirm(`Delete ${filename}?`)){
+    renderVideo(name) {
+        const toggleControls = () => this.setState({showControls: !this.state.showControls});
+
+        return (
+            <video controls={this.state.showControls} preload="metadata" onMouseEnter={toggleControls} onMouseLeave={toggleControls}>
+                <source src={`/dropbox/${name}`} type="video/mp4"/>
+            </video>
+        )
+    }
+
+    renderImage(name) {
+        return (
+            <img alt={""} src={`/dropbox/${name}`}/>
+        )
+    }
+
+
+    renderPreview(name) {
+        return _.endsWith(name, '.mp4') ? this.renderVideo(name) : this.renderImage(name)
+    }
+
+    deleteVideo(filename) {
+        if (window.confirm(`Delete ${filename}?`)) {
             agent.Videos.deleteVideo(filename)
                 .then(()=> this.props.updateList())
         }
@@ -25,26 +42,14 @@ class VideoListItem extends React.Component {
     render() {
         const {video} = this.props;
         return (
-            <div key={video} className="item-preview">
+            <div key={video} className="item-preview col-sm-12 col-md-4">
                 <span className="preview-link">
                     {this.renderPreview(video)}
-                    <h3>
-                        {video}
-                        <i className="fa fa-trash-o pull-right" onClick={this.deleteVideo.bind(this, video)}/>
-                    </h3>
-                    <p>Video description</p>
-                    {/*<ul className="tag-list">
-                        {
-                            ['football', 'animals'].map(tag => {
-                                return (
-                                    <li className="tag-default tag-pill tag-outline" key={tag}>
-                                        {tag}
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>*/}
                 </span>
+                <h5>
+                    <span className="pointer pull-right">Edit</span>
+                    <i className="fa fa-trash-o pointer" onClick={this.deleteVideo.bind(this, video)}/>
+                </h5>
             </div>
         );
     }

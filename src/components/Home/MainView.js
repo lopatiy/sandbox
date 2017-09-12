@@ -54,7 +54,7 @@ class MainView extends React.Component {
 
     render() {
         return (
-            <div className="col-md-10 col-md-offset-1">
+            <div className="col-lg-12">
                 <div className="feed-toggle">
                     <ul className="nav nav-pills outline-active">
                         {_.map(this.getPlaces(), this.renderTab.bind(this))}
