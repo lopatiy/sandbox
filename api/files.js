@@ -1,5 +1,6 @@
 const fs = require('fs.promised');
 const path = require('path');
+const shell = require('shelljs');
 const _ = require('lodash');
 
 class Files  {
@@ -35,6 +36,11 @@ class Files  {
         return this.api.remove(file)
             .then(()=> this.update());
     }
+
+    cut(file, start, end) {
+        return this.api.cut(file, start, end)
+            .then(()=> this.update());
+    }
 }
 
 class FilesFS {
@@ -54,6 +60,23 @@ class FilesFS {
 
     remove(filename) {
         return fs.unlink(`${this.source}/${filename}`);
+    }
+
+    cutConstructor(filename, newFilename, start, end){
+        return `ffmpeg -ss 00:00:30.0 -i ${filename}.mp4 -c copy -t 00:00:10.0 ${newFilename}.mp4`
+    }
+
+    cut(filename, start, end) {
+        let newFilename = +new Date();
+        return new Promise((resolve, reject) => {
+            shell.exec(this.cutConstructor(filename, newFilename, start, end), (code, out, err) => {
+                if (code === 0) {
+                    resolve(`${filename}.${newFilename.MP4}`);
+                } else {
+                    reject(err);
+                }
+            })
+        })
     }
 }
 

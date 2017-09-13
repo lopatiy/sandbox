@@ -1,16 +1,16 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
 import Agent from '../../agent';
-import {Link} from 'react-router-dom';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
-import { reduxForm, Field, reset, change as changeFieldValue } from 'redux-form';
+import { reduxForm, Field, change as changeFieldValue } from 'redux-form';
 
 import './VideoEdit.css'
 
 const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => bindActionCreators({changeFieldValue});
+const mapDispatchToProps = dispatch => bindActionCreators({changeFieldValue}, dispatch);
 
 class VideoEdit extends React.Component {
     renderVideo(id) {
@@ -23,15 +23,26 @@ class VideoEdit extends React.Component {
         )
     }
 
-    onSubmit({video, start, end}) {
-        if (video && start && end) {
-            let body = new FormData();
-            body.append('video', video);
-            body.append('start', start);
-            body.append('end', end);
+    onSubmit({Start, End}) {
+        let body = new FormData();
+        if (Start && End) {
+            body.append('video', _.get(this.props, 'match.params.id'));
+            body.append('start', Start);
+            body.append('end', End);
             Agent.Videos.cut(body)
                 .then((filename) => this.update())
                 .catch(err => console.error(err))
+        }
+    }
+
+    setTiming(field){
+        const videoElement = ReactDOM.findDOMNode(this.refs.video);
+        let value = videoElement.currentTime,
+            minutes = Math.floor(value / 60),
+            seconds = Math.floor(value % 60);
+
+        if(videoElement){
+            this.props.changeFieldValue('videoEdit', field, `${minutes}:${seconds}`);
         }
     }
 
@@ -47,6 +58,7 @@ class VideoEdit extends React.Component {
                         <div>
                             <div className="input-group">
                                 <Field
+                                    readOnly
                                     name="Start"
                                     component="input"
                                     className="form-control"
@@ -54,13 +66,14 @@ class VideoEdit extends React.Component {
                                     placeholder="Start"
                                 />
                             <span className="input-group-btn">
-                                <button className="btn btn-primary" type="button">
+                                <button className="btn btn-primary" type="button" onClick={this.setTiming.bind(this,'Start')}>
                                     <i className="fa fa-arrow-left"/>
                                 </button>
                             </span>
                             </div>
                             <div className="input-group">
                                 <Field
+                                    readOnly
                                     name="End"
                                     component="input"
                                     className="form-control"
@@ -68,13 +81,14 @@ class VideoEdit extends React.Component {
                                     placeholder="End"
                                 />
                             <span className="input-group-btn">
-                                <button className="btn btn-primary" type="button">
+                                <button className="btn btn-primary" type="button" onClick={this.setTiming.bind(this,'End')}>
                                     <i className="fa fa-arrow-left"/>
                                 </button>
                             </span>
                             </div>
                         </div>
-                        <div className="buttons">
+                        <span className="clearfix"/>
+                        <div className="buttons ">
                             <button className="btn btn-primary" type="submit">
                                 Submit
                             </button>

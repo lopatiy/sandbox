@@ -12,7 +12,7 @@ const api = {
     delete: url => axios.delete(getUrl(url)).then(responseData),
     post: (url, data, onUploadProgress) => {
         const config = {
-            url : getUrl(url),
+            url: getUrl(url),
             method: 'post',
             data,
             onUploadProgress
@@ -29,22 +29,12 @@ const onUploadProgress = (callback) => {
 };
 
 const Videos = {
-    upload: (body, progressCallback) => {
-        let promise = api.post(`/video-upload`, body, onUploadProgress(progressCallback));
-        if(promise){
-            return promise.then(responseData);
-        }
-    },
-    download: (body) => {
-        let promise = api.post(`/video-download`, body);
-        if (promise) {
-            return promise.then(responseData);
-        }
-    },
-    deleteVideo: (filename) => api.delete(`/video/${filename}`),
-    cut: (body) => {},
-    loading : () => api.get('/loading-videos'),
-    all: page => api.get('/videos')
+    all: page => api.get('/videos'),
+    loading: () => api.get('/loading-videos'),
+    upload: (body, progressCallback) => api.post(`/video-upload`, body, onUploadProgress(progressCallback)).then(responseData),
+    download: (body) => api.post(`/video-download`, body).then(responseData),
+    cut: (body) => api.post(`/video-cut`, body),
+    deleteVideo: (filename) => api.delete(`/video/${filename}`)
 };
 
 export default {

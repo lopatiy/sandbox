@@ -51,6 +51,17 @@ app.post('/api/video-download', (req, res) => {
     }
 });
 
+app.post('/api//video-cut', (req, res) => {
+    const {video, start, end} = req.body;
+    if (video && start && end) {
+        downloader.addVideoToQueue(req.body.downloadUrl)
+            .then(() => res.send('Added to queue'))
+            .catch(e => res.status(500).send(e))
+    } else {
+        res.status(400).send('Missing Video URL');
+    }
+});
+
 app.get('/api/videos', (req, res) => {
     files.list()
         .then((files) => {
