@@ -11,6 +11,13 @@ div.item-preview {
     }
   }
 
+  a {
+    color: white;
+
+    &:hover {
+      color: white;
+    }
+  }
 
   background: #5CB85C;
   border: 5px solid white;
