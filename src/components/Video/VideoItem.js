@@ -2,6 +2,7 @@ import React from 'react';
 import './VideoItem.css';
 import _ from 'lodash';
 import agent from '../../agent';
+import {Link} from 'react-router-dom';
 
 class VideoListItem extends React.Component {
     constructor(props, context){
@@ -41,13 +42,18 @@ class VideoListItem extends React.Component {
 
     render() {
         const {video} = this.props;
+
+        let timestamp = _.initial(video.split('.')).join('.');
+
         return (
             <div key={video} className="item-preview col-sm-12 col-md-4">
                 <span className="preview-link">
                     {this.renderPreview(video)}
                 </span>
                 <h5>
-                    <span className="pointer pull-right">Edit</span>
+                    <Link to={`/video/${timestamp}`}>
+                        <span className="pointer pull-right">Edit</span>
+                    </Link>
                     <i className="fa fa-trash-o pointer" onClick={this.deleteVideo.bind(this, video)}/>
                 </h5>
             </div>

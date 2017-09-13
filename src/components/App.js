@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import Header from './Header';
 import Home from './Home';
 import Login from './Login';
+import VideoEdit from './Video/VideoEdit';
 import {Switch, Route} from 'react-router-dom';
 
 const renderMergedProps = (component, ...rest) => {
@@ -31,6 +32,7 @@ class App extends Component {
                     <PropsRoute path="/uploaded" exact key="uploaded" component={Home} place="uploaded"/>
                     <PropsRoute path="/upload" exact key="upload" component={Home} place="upload"/>
                     <PropsRoute path="/download" exact key="upload" component={Home} place="download"/>
+                    <Route path="/video/:id" key="edit" component={VideoEdit}/>
                     <Route path="/login" key="login" component={Login}/>
                 </Switch>
             </div>

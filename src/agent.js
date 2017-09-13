@@ -42,6 +42,7 @@ const Videos = {
         }
     },
     deleteVideo: (filename) => api.delete(`/video/${filename}`),
+    cut: (body) => {},
     loading : () => api.get('/loading-videos'),
     all: page => api.get('/videos')
 };
