@@ -38,11 +38,12 @@ class VideoEdit extends React.Component {
     setTiming(field){
         const videoElement = ReactDOM.findDOMNode(this.refs.video);
         let value = videoElement.currentTime,
-            minutes = Math.floor(value / 60),
-            seconds = Math.floor(value % 60);
+            time = _([value/3600, value / 60, value % 60])
+                .map(Math.floor)
+                .map((el) => _.padStart(el, 2, '0')).join(':');
 
         if(videoElement){
-            this.props.changeFieldValue('videoEdit', field, `${minutes}:${seconds}`);
+            this.props.changeFieldValue('videoEdit', field, time);
         }
     }
 
