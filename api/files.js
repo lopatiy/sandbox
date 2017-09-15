@@ -63,7 +63,7 @@ class FilesFS {
     }
 
     cutConstructor(filename, newFilename, start, end){
-        const command = `ffmpeg -ss ${start}.0 -i ${this.source}/${filename}.mp4 -c copy -to ${end}.0 ${this.source}/${newFilename}.mp4`;
+        const command = `ffmpeg -i ${this.source}/${filename}.mp4 -ss ${start}.0 -to ${end}.0 -c copy ${this.source}/${newFilename}.mp4`;
         console.log(`VIDEO CUT :: ${command}`);
         return command;
     }
