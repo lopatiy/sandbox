@@ -6,6 +6,8 @@ import Agent from '../../agent';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { reduxForm, Field, change as changeFieldValue } from 'redux-form';
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
 
 import './VideoEdit.css'
 
@@ -13,13 +15,25 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({changeFieldValue}, dispatch);
 
 class VideoEdit extends React.Component {
+    constructor(props,context){
+        super(props,context);
+
+        this.state = {};
+    }
+
     renderVideo(id) {
-        if (!id) return null;
+        if (!id) {
+            return null;
+        }
 
         return (
-            <video ref="video" controls preload="metadata">
-                <source src={`/dropbox/${id}`} type="video/mp4"/>
-            </video>
+            <div className='video-container' style={{width: '100%'}}>
+                <Video preload="metadata"
+                       controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}>
+                    <source src={`/dropbox/${id}`} type="video/mp4"/>
+                </Video>
+                <canvas ref="canvas" style={{width: '100%', height: '100%'}} />
+            </div>
         )
     }
 
@@ -51,9 +65,13 @@ class VideoEdit extends React.Component {
         const {handleSubmit, reset} = this.props;
         const id = _.get(this.props, 'match.params.id');
 
+        const crop = () => {
+            this.setState({crop:true, rect: this.refs.video.getBoundingClientRect()})
+        };
+
         return (
             <div className="col-lg-12">
-                <div className="edit-page col-lg-8 col-lg-offset-2">
+                <div className="edit-page col-lg-10 col-lg-offset-1">
                     {this.renderVideo(`${id}.mp4`)}
                     <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                         <div>
@@ -90,10 +108,13 @@ class VideoEdit extends React.Component {
                         </div>
                         <span className="clearfix"/>
                         <div className="buttons ">
-                            <button className="btn btn-primary" type="submit">
+                            <button className="btn btn-primary pull-right" type="submit">
                                 Submit
                             </button>
-                            <button className="btn btn-primary" type="button" onClick={reset}>
+                            <button className="btn btn-primary pull-right" type="button" onClick={crop.bind(this)}>
+                                Crop
+                            </button>
+                            <button className="btn btn-primary pull-left" type="button" onClick={reset}>
                                 Clear
                             </button>
                         </div>

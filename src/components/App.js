@@ -7,6 +7,7 @@ import Banner from './Home/Banner'
 import Login from './Login';
 import VideoEdit from './Video/VideoEdit';
 import {Switch, Route} from 'react-router-dom';
+import './App.css'
 
 const renderMergedProps = (component, ...rest) => {
     const finalProps = Object.assign({}, ...rest);
