@@ -40,8 +40,6 @@ class VideoList extends React.Component {
             );
         }
 
-
-
         return (
             <div>
                 {_.map(_.reverse(_.clone(this.props.videos)), video =>

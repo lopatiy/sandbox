@@ -37,8 +37,8 @@ class Files  {
             .then(()=> this.update());
     }
 
-    cut(file, start, end) {
-        return this.api.cut(file, start, end)
+    cut(file, start, end, x, y, w, h) {
+        return this.api.cut(file, start, end, x, y, w, h)
             .then(()=> this.update());
     }
 }
@@ -62,22 +62,32 @@ class FilesFS {
         return fs.unlink(`${this.source}/${filename}`);
     }
 
-    cutConstructor(filename, newFilename, start, end){
-        const command = `ffmpeg -i ${this.source}/${filename}.mp4 -ss ${start}.0 -to ${end}.0 -c copy ${this.source}/${newFilename}.mp4`;
+    cutConstructor(filename, newFilename, start, end, x, y, w, h){
+        const cut = `-ss ${start}.0 -to ${end}.0`;
+        const crop = `-filter:v "crop=${x}:${y}:${w}:${h}"`;
+
+        let body = [cut];
+
+        if(x && y && w && h){
+            body.push(crop)
+        }
+
+        const command = `ffmpeg -i ${this.source}/${filename}.mp4 ${body.join(' ')} -strict -2 -crf 18 ${this.source}/${newFilename}.mp4`;
         console.log(`VIDEO CUT :: ${command}`);
         return command;
     }
 
-    cut(filename, start, end) {
+    cut(filename, start, end, x, y, w, h) {
         let newFilename = +new Date();
         return new Promise((resolve, reject) => {
-            shell.exec(this.cutConstructor(filename, newFilename, start, end), (code, out, err) => {
-                if (code === 0) {
-                    resolve(`${filename}.${newFilename.MP4}`);
-                } else {
-                    reject(err);
-                }
-            })
+            shell.exec(this.cutConstructor(filename, newFilename, start, end, x, y, w, h),
+                (code, out, err) => {
+                    if (code === 0) {
+                        resolve(`${filename}.${newFilename.MP4}`);
+                    } else {
+                        reject(err);
+                    }
+                })
         })
     }
 }
