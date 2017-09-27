@@ -40,9 +40,11 @@ class VideoList extends React.Component {
             );
         }
 
+
+
         return (
             <div>
-                {_.map(_.reverse(this.props.videos), video =>
+                {_.map(_.reverse(_.clone(this.props.videos)), video =>
                     <VideoItem key={video} video={video} updateList={this.updateList.bind(this)}/>)}
             </div>
         );
