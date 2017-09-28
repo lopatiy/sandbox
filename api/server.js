@@ -53,7 +53,7 @@ app.post('/api/video-download', (req, res) => {
 
 app.post('/api/video-cut', (req, res) => {
     const {video, start, end, x, y, w, h} = req.body;
-    if (video && start && end) {
+    if (video) {
         files.cut(video, start, end, x, y, w, h)
             .then(() => res.send('Added to queue'))
             .catch(e => res.status(500).send(e))

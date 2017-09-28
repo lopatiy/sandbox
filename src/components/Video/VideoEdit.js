@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router';
 import Agent from '../../agent';
@@ -26,31 +25,85 @@ class VideoEdit extends React.Component {
             return null;
         }
 
+        let initialX, initialY;
+
+        const watchMouse = (e) => {
+                const canvas = this.refs.canvas;
+                const rect = this.refs.canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                const context = canvas.getContext('2d');
+
+                context.fillStyle = 'rgba(0,0,0,0.6)';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.clearRect(initialX, initialY, e.layerX - initialX, e.layerY - initialY);
+            },
+            startWatching = (e) => {
+                initialX = e.nativeEvent.layerX;
+                initialY = e.nativeEvent.layerY;
+                this.refs.canvas.addEventListener('mousemove', watchMouse)
+            },
+            stopWatching = (e) => {
+                this.refs.canvas.removeEventListener('mousemove', watchMouse);
+                this.setState({
+                    crop : {
+                        x:initialX,
+                        y:initialY,
+                        w:e.nativeEvent.layerX - initialX,
+                        h:e.nativeEvent.layerY - initialY
+                    }
+                });
+                initialX = initialY = null;
+            };
+
         return (
             <div className='video-container' style={{width: '100%'}}>
-                <Video preload="metadata"
+                <Video preload="metadata" ref="video"
                        controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}>
                     <source src={`/dropbox/${id}`} type="video/mp4"/>
                 </Video>
-                <canvas ref="canvas" style={{width: '100%', height: '100%'}} />
+                <canvas ref="canvas" style={{width: '100%', height: '100%'}}
+                onMouseDown={startWatching}
+                onMouseUp={stopWatching}/>
             </div>
         )
+    }
+    
+    calculateVideoPoint(x,y) {
+        const rect = this.refs.video.videoEl.getBoundingClientRect();
+        const originalRect = {
+            width: this.refs.video.videoEl.videoWidth,
+            height: this.refs.video.videoEl.videoHeight,
+        };
+
+        return {
+            x: x / (rect.width / originalRect.width),
+            y: y / (rect.height / originalRect.height),
+        }
     }
 
     onSubmit({Start, End}) {
         let body = new FormData();
-        if (Start && End) {
-            body.append('video', _.get(this.props, 'match.params.id'));
+        body.append('video', _.get(this.props, 'match.params.id'));
+        if(Start && End){
             body.append('start', Start);
             body.append('end', End);
-            Agent.Videos.cut(body)
-                .then((filename) => this.update())
-                .catch(err => console.error(err))
         }
+        if(this.state.crop){
+            const a = this.calculateVideoPoint(this.state.crop.x, this.state.crop.y);
+            const b = this.calculateVideoPoint(this.state.crop.w, this.state.crop.h);
+            body.append('x', a.x);
+            body.append('y', a.y);
+            body.append('w', b.x);
+            body.append('h', b.y);
+        }
+        Agent.Videos.cut(body)
+            .then((filename) => this.update())
+            .catch(err => console.error(err))
     }
 
     setTiming(field){
-        const videoElement = ReactDOM.findDOMNode(this.refs.video);
+        const videoElement = this.refs.video.videoEl;
         let value = videoElement.currentTime,
             time = _([value/3600, value / 60, value % 60])
                 .map(Math.floor)
@@ -64,10 +117,6 @@ class VideoEdit extends React.Component {
     render() {
         const {handleSubmit, reset} = this.props;
         const id = _.get(this.props, 'match.params.id');
-
-        const crop = () => {
-            this.setState({crop:true, rect: this.refs.video.getBoundingClientRect()})
-        };
 
         return (
             <div className="col-lg-12">
@@ -110,9 +159,6 @@ class VideoEdit extends React.Component {
                         <div className="buttons ">
                             <button className="btn btn-primary pull-right" type="submit">
                                 Submit
-                            </button>
-                            <button className="btn btn-primary pull-right" type="button" onClick={crop.bind(this)}>
-                                Crop
                             </button>
                             <button className="btn btn-primary pull-left" type="button" onClick={reset}>
                                 Clear

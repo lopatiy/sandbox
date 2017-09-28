@@ -64,13 +64,11 @@ class FilesFS {
 
     cutConstructor(filename, newFilename, start, end, x, y, w, h){
         const cut = `-ss ${start}.0 -to ${end}.0`;
-        const crop = `-filter:v "crop=${x}:${y}:${w}:${h}"`;
+        const crop = `-filter:v "crop=${w}:${h}:${x}:${y}"`;
 
-        let body = [cut];
-
-        if(x && y && w && h){
-            body.push(crop)
-        }
+        let body = [];
+        start && end && body.push(cut);
+        x && y && w && h && body.push(crop);
 
         const command = `ffmpeg -i ${this.source}/${filename}.mp4 ${body.join(' ')} -strict -2 -crf 18 ${this.source}/${newFilename}.mp4`;
         console.log(`VIDEO CUT :: ${command}`);
