@@ -4,6 +4,7 @@ const path = require('path');
 const files = require('./files');
 const {Downloader} = require('./downloader');
 const _ = require('lodash');
+const ig = require('./content-maker/index');
 
 const app = express();
 const downloader = new Downloader();
@@ -68,6 +69,16 @@ app.get('/api/videos', (req, res) => {
             res.send(files)
         })
         .catch(e => res.status(500).send(e));
+});
+
+app.get('/api/ig/account/:name', (req, res) => {
+    const name = req.params.name;
+    if(_.isString(name)){
+        ig.getAccount(name)
+            .then(account => res.send(account.params));
+    } else {
+        res.status(200).send('Account name argument missing.')
+    }
 });
 
 app.get('/api/video', (req, res) => {

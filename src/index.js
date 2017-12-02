@@ -8,8 +8,6 @@ import registerServiceWorker from './registerServiceWorker';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MaterialApp from './material-components/App';
-
-
 import './lib/css/index.css';
 import './lib/css/override.css';
 

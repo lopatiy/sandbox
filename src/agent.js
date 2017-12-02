@@ -37,6 +37,8 @@ const Videos = {
     deleteVideo: (filename) => api.delete(`/video/${filename}`)
 };
 
-export default {
-    Videos
+const IG = {
+    account: name => api.get(`/ig/account/${name}`)
 };
+
+export default {Videos, IG};

@@ -17,6 +17,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import AddToQueue from 'material-ui-icons/AddToQueue';
 import {Switch, Route} from 'react-router-dom';
 import {withRouter} from 'react-router';
+import VictimList from './victims/VictimList';
 
 const drawerWidth = 240;
 
@@ -164,6 +165,7 @@ class App extends React.Component {
                 <div className="home-page">
                     <div className="container page">
                         <div className="row">
+                            <Route path="/victims" key="victims" component={VictimList}/>
                             <Route path="/" exact key="feed" component={null} place=""/>
                             <PropsRoute path="/uploaded" exact key="uploaded" component={null} place="uploaded"/>
                             <Route path="/login" key="login" component={null}/>
